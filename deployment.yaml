@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-service
+spec:
+  selector:
+    app: online-shopping-app
+  ports:
+  - protocol: "TCP"
+    port: 8090
+    targetPort: 9000
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: online-shopping-app
+spec:
+  selector:
+    matchLabels:
+      app: online-shopping-app
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: online-shopping-app
+    spec:
+      containers:
+      - name: online-shopping-app
+        image: localhost
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9000
